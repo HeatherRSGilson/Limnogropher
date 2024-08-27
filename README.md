@@ -1,4 +1,4 @@
-# Limnogropher
+# Limnogropher v0.1
 Provided with a greyscale heightmap, Limnogropher will generate an image overlayed with paths representing rivers procedurally generated based on elevation.
 
 # Dependencies
