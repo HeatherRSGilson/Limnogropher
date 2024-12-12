@@ -170,11 +170,11 @@ class limnograph:
                 if pixel.point_type == node_type.RIVER.value:
                     #print("drawing point " + str([(pixel[4], pixel[5])]))
                     #renderer.line([(pixel[4], pixel[5]), (pixel[4]+1, pixel[5]+1)], "#FF00FFFF", 3)
-                    renderer.point([(pixel.row, pixel.col)], "#FF00FFFF")
+                    renderer.point([(pixel.col, pixel.row)], "#FF00FFFF")
                 elif pixel.point_type == node_type.LAKE.value:
-                    renderer.point([(pixel.row, pixel.col)], "#FFFF00FF")
+                    renderer.point([(pixel.col, pixel.row)], "#FFFF00FF")
                 elif pixel.point_type == node_type.SOURCE.value:
-                    renderer.point([(pixel.row, pixel.col)], "#00FFFFFF")
+                    renderer.point([(pixel.col, pixel.row)], "#00FFFFFF")
         with Image.open(self.path_to_heightmap) as output:
             output = output.convert("RGBA")
             output.paste(river_image, (0,0), mask=river_image)
@@ -189,7 +189,7 @@ class limnograph:
             for pixel in row:
                 if pixel.point_type == node_type.SOURCE.value:
                     #print("drawing point " + str([(pixel[4], pixel[5])]))
-                    renderer.point([(pixel.row, pixel.col)], "#FF00FFFF")
+                    renderer.point([(pixel.col, pixel.row)], "#FF00FFFF")
         with Image.open(self.path_to_heightmap) as output:
             output = output.convert("RGBA")
             output.paste(river_image, (0,0), mask=river_image)
