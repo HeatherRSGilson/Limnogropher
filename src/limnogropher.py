@@ -39,6 +39,7 @@ class limnograph:
         self.ariditymap = None
         self.min_height=-1
         self.max_height=-1
+        self.basin_tolerance = 0
         if output_path is None:
             self.output_path = path_to_heightmap + "/output"
         else:
@@ -97,8 +98,10 @@ class limnograph:
             generated += 1
             self.matrix[new_source[0]][new_source[1]].point_type = node_type.SOURCE.value           
 
-    def generate_rivers(self):
+    def generate_rivers(self, basin_tolerance = 0):
         #wrapper to iterate over each source and call generate_river function
+        #Also set universal river config 
+        self.basin_tolerance = basin_tolerance
         for row in self.matrix:
             for pixel in row:
                 if pixel.point_type == node_type.SOURCE.value:
@@ -111,6 +114,7 @@ class limnograph:
         #print("drawing river from source: " + str(ind))
         previous_dir = dir.NONE.value
         while True:
+            #recalculate nearby cells
             dir_heights = {
             dir.NORTH.value  : self.matrix[ind[0]][ind[1]-1].height,
             dir.SOUTH.value  : self.matrix[ind[0]][ind[1]+1].height,
@@ -132,7 +136,7 @@ class limnograph:
                 ind = tuple(map(sum, zip(ind, lowest_dir[0])))
             elif len(lowest_dir) > 1:
                 if previous_dir != dir.NONE.value and previous_dir in lowest_dir: # may change to not require prev in lowest
-                    new_dir = random.choice(lowest_dir) #random.choice([random.choice(lowest_dir), previous_dir])
+                    new_dir = random.choice([random.choice(lowest_dir), previous_dir]) #random.choice(lowest_dir) 
                 else:
                     new_dir = random.choice(lowest_dir)
                 ind = tuple(map(sum, zip(ind, new_dir)))
@@ -149,7 +153,7 @@ class limnograph:
             if self.matrix[ind[0]][ind[1]].point_type == node_type.RIVER.value or self.matrix[ind[0]][ind[1]].point_type == node_type.SOURCE.value:
                 print("hit existing river... ending path")
                 break
-            elif self.matrix[ind[0]][ind[1]].height == self.min_height:
+            elif self.matrix[ind[0]][ind[1]].height <= self.min_height + self.basin_tolerance:
                 print(f"hit lowest point ({self.matrix[ind[0]][ind[1]].height})... ending path")
                 break
             print("new river point at " + str(ind))
@@ -203,3 +207,8 @@ class limnograph:
             for pixel in row:
                 if pixel.point_type == node_type.SOURCE.value:
                     print(pixel)
+
+#TODO unified Config Interface instead of individual function args
+#TODO Main wrapper function
+#TODO UI / Live update
+#TODO variable image processing
