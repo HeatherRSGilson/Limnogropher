@@ -14,6 +14,8 @@ This project currently only provides the class and functions without an interfac
 # TODO
 - Improve in-file documentation (doc-strings, inline, type hints...)
 - Implement user interface
+-- Live update
+- Add better config interface to class
 - Add additional parameters to functions for increased customizability (filters & further preprocessing, color space reduction)
 - Finish aridity functionality (currently a map may be provided, but it is not used in calculation of source generation)
 - Add output options (rivers only, etc.)
